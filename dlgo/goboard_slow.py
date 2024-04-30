@@ -32,7 +32,7 @@ class GoString():
         self.liberties.remove(point)
 
     def add_liberty(self, point):
-        self.liberties.remove(point)
+        self.liberties.add(point)
 
     def merged_with(self, go_string):
         assert go_string.color == self.color
@@ -73,6 +73,7 @@ class Board():
 
     def place_stone(self, player, point):
         assert self.is_on_grid(point)
+        #print(f"self._grid.get(point) : {self._grid.get(point)}")
         assert self._grid.get(point) is None
         adjacent_same_color = []
         adjacent_opposite_color = []
@@ -118,6 +119,7 @@ class GameState():
         self.last_move = move
 
     def apply_move(self, move):
+       
         if move.is_play:
             next_board = copy.deepcopy(self.board)
             next_board.place_stone(self.next_player, move.point)
@@ -164,7 +166,7 @@ class GameState():
         while past_state is not None:
             if past_state.situation == next_situation:
                 return True
-        past_state = past_state.previous_state
+            past_state = past_state.previous_state
         return False
     
     def is_valid_move(self, move):
@@ -172,6 +174,6 @@ class GameState():
             return False
         if move.is_pass or move.is_resign:
             return True
-        is_self_capture = self.is_move_self_capture(self.next_player, move)
-        ko_violation =  self.does_move_violate_ko(self.next_player, move)
-        return (self.board.get(move.point) is None and not is_self_capture and not ko_violation)
+        return (self.board.get(move.point) is None and not self.is_move_self_capture(self.next_player, move) and not self.does_move_violate_ko(self.next_player, move))
+    
+    
