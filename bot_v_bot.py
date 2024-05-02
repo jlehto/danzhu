@@ -23,10 +23,11 @@ def main():
         time.sleep(0.5)
 
         bot_move = bots[game.next_player].select_move(game)
+        color = game.next_player.color
         game = game.apply_move(bot_move)
         #print(f"last move: {game.last_move.point}")
         if game.last_move.point is not None:
-            ui.draw(game.last_move.point, game.next_player.color)
+            ui.draw(game.last_move.point,color)
         if len(game.removed) > 0:     
             for point in game.removed:
                 ui.remove(point)

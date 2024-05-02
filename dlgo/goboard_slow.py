@@ -137,7 +137,7 @@ class GameState():
         if isinstance(board_size, int):
             board_size = (board_size, board_size)
         board = Board(*board_size)
-        return GameState(board, Player.white, None, None, {}) # HACK player is white, since the first move changes the color
+        return GameState(board, Player.black, None, None, {}) # HACK player is white, since the first move changes the color
     
     def is_over(self):
         if self.last_move is None:
