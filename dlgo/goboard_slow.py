@@ -72,8 +72,8 @@ class Board():
         return string    
 
     def place_stone(self, player, point):
+        removed = []
         assert self.is_on_grid(point)
-        #print(f"self._grid.get(point) : {self._grid.get(point)}")
         assert self._grid.get(point) is None
         adjacent_same_color = []
         adjacent_opposite_color = []
@@ -99,7 +99,8 @@ class Board():
             other_color_string.remove_liberty(point)
         for other_color_string in adjacent_opposite_color:
             if other_color_string.num_liberties == 0:
-                self._remove_string(other_color_string)
+                removed = self._remove_string(other_color_string)
+        return removed
   
     def _remove_string(self, string):
         for point in string.stones:
@@ -110,29 +111,33 @@ class Board():
                 if neighbor_string is not string:
                     neighbor_string.add_liberty(point)
             self._grid[point] = None
+        return string.stones
 
 class GameState():
-    def __init__(self, board, next_player, previous, move):
+    def __init__(self, board, next_player, previous, move, removed):
         self.board = board
         self.next_player = next_player
         self.previous_state = previous
         self.last_move = move
+        self.removed = removed
 
     def apply_move(self, move):
-       
+        self.removed = {}
+        removed = {}
         if move.is_play:
             next_board = copy.deepcopy(self.board)
-            next_board.place_stone(self.next_player, move.point)
+            removed = next_board.place_stone(self.next_player, move.point) 
         else:
             next_board = self.board
-        return GameState(next_board, self.next_player.other, self, move)
+        #print(f"removed : {removed}")    
+        return GameState(next_board, self.next_player.other, self, move, removed)
     
     @classmethod
     def new_game(cls, board_size):
         if isinstance(board_size, int):
             board_size = (board_size, board_size)
         board = Board(*board_size)
-        return GameState(board, Player.black, None, None)
+        return GameState(board, Player.white, None, None, {}) # HACK player is white, since the first move changes the color
     
     def is_over(self):
         if self.last_move is None:

@@ -9,6 +9,10 @@ class Player(enum.Enum):
     @property
     def other(self):
         return Player.black if self == Player.white else Player.white
+    
+    @property
+    def color(self):
+        return "BLACK" if self == Player.black else "WHITE"
 
 
 class Point(namedtuple('Point', 'row col')):
