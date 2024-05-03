@@ -1,5 +1,5 @@
 from dlgo import agent
-from dlgo import goboard_slow as goboard
+from dlgo import goboard
 from dlgo import gotypes
 
 from dlgo.ui import UI
