@@ -8,16 +8,17 @@ import time
 
 
 def main():
-    ui = UI()
-
+   
     board_size = 9
+
+    ui = UI()
     game = goboard.GameState.new_game(board_size)
     bots = {
         gotypes.Player.black: agent.naive.RandomBot(),
         gotypes.Player.white: agent.naive.RandomBot(),
     }
     
-    ui.initialize()
+    ui.initialize(board_size)
 
     while not game.is_over():
         time.sleep(0.5)
