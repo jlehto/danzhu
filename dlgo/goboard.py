@@ -1,5 +1,5 @@
 import copy
-from dlgo.gotypes import Player
+from dlgo.gotypes import Player, Point
 from dlgo import zobrist
 
 class Move():
@@ -64,11 +64,14 @@ class Board():
         return 1 <= point.row <= self.num_rows and 1 <= point.col <= self.num_cols
 
     def get(self, point):
+        print("sfsfs")
+        print(point.row, point.col)
         string = self._grid.get(point)
+        print(string)
         if string is None:
             return None
         return string.color
-
+    
     def get_go_string(self, point):
         string = self._grid.get(point)
         if string is None:
@@ -162,6 +165,10 @@ class GameState():
         board = Board(*board_size)
         return GameState(board, Player.black, None, None, {}) 
     
+    def stone_at(self, point):
+        # used by ui to query if stone is on this point
+        return self.board.get(point)
+    
     def is_over(self):
         if self.last_move is None:
             return False
@@ -197,6 +204,8 @@ class GameState():
             return False
         if move.is_pass or move.is_resign:
             return True
+        print(f"move.point {move.point}, self.board.get(move.point) {self.board.get(move.point)}")
         return (self.board.get(move.point) is None and not self.is_move_self_capture(self.next_player, move) and not self.does_move_violate_ko(self.next_player, move))
     
+
     

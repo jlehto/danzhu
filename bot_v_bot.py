@@ -18,11 +18,11 @@ def main():
         gotypes.Player.white: agent.naive.RandomBot(),
     }
     
-    ui.initialize(board_size)
+    ui.initialize(game, board_size)
 
     while not game.is_over():
         time.sleep(0.5)
-
+        ui.handle_events()
         bot_move = bots[game.next_player].select_move(game)
         color = game.next_player.color
         game = game.apply_move(bot_move)
@@ -32,10 +32,7 @@ def main():
         if len(game.removed) > 0:     
             for point in game.removed:
                 ui.remove(point)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()    
+        
 
 
 if __name__ == '__main__':
